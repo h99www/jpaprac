@@ -7,9 +7,10 @@ import com.greedy.menu.entity.Menu;
 
 import java.util.Scanner;
 
-public class MenuView {
+public class MenuView implements ViewName {
     private final MenuController menuController;
     private final Scanner sc;
+
     public MenuView() {
         menuController = new MenuController();
         sc = new Scanner(System.in);
@@ -30,29 +31,30 @@ public class MenuView {
 
             int no = sc.nextInt();
 
-            switch(no) {
+            switch (no) {
                 case 1: menuController.findMenuList(); break;
-                case 2: menuController.findMenuByMenuCode(inputMenuCode("조회할 메뉴 번호를 입력하세요 : ")); break;
-                case 3: menuController.findMenuByCategoryCode(inputCategoryCode()); break;
+                case 2: menuController.findMenuByMenuCode(inputCode(DETAIL_MENU_CODE)); break;
+                case 3: menuController.findMenuByCategoryCode(inputCode(DETAIL_CATEGORY_CODE)); break;
                 case 4: menuController.registMenu(registMenu()); break;
                 case 5: modify(); break;
-                case 6: menuController.removeMenu(inputMenuCode("삭제할 메뉴의 번호를 입력하세요 : ")); break;
-                case 0:  break;
-                default : System.out.println("다시 입력하세요"); break;
+                case 6: menuController.removeMenu(inputCode(REMOVE_MENU_CODE)); break;
+                case 0: break;
+                default: System.out.println(TRY_AGAIN); break;
             }
 
-            if(no == 0) {
+            if (no == 0) {
                 break;
             }
 
-
-        } while(true);
+        } while (true);
     }
 
     private void modify() {
 
         do {
-            System.out.println();System.out.println();System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
             System.out.println("==================");
             System.out.println("메뉴 정보 수정");
             System.out.println("1. 메뉴 이름 수정");
@@ -67,19 +69,11 @@ public class MenuView {
                 case 2: menuController.modifyMenuPrice(modifyPrice()); break;
                 default : System.out.println("다시 입력하세요"); break;
             }
-            if(no == 0) {
+            if (no == 0) {
                 break;
             }
 
-
-
-
-
-        } while(true);
-
-
-
-
+        } while (true);
     }
 
     private MenuDTO modifyPrice() {
@@ -127,33 +121,9 @@ public class MenuView {
         return menu;
     }
 
-    private int inputCategoryCode() {
-        System.out.print("카테고리 코드를 입력하세요 : ");
-
-        return sc.nextInt();
-    }
-
-    private int inputMenuCode(String message) {
+    private int inputCode(String message) {
         System.out.print(message);
 
         return sc.nextInt();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
