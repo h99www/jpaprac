@@ -17,7 +17,7 @@ public class Template {
         return entityManagerFactory.createEntityManager();
     }
 
-    public void close(EntityManager entityManager) {
+    public static void close(EntityManager entityManager) {
         if(entityManager != null ){
             entityManager.close();
         }

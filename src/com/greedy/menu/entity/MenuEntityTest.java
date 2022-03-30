@@ -137,7 +137,7 @@ class MenuEntityTest {
         Menu menu = entityManager.find(Menu.class, 5);
 
         assertNull(menu);
-        
+
         entityTransaction.rollback();
 
     }
