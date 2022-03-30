@@ -41,7 +41,8 @@ public class MenuEntity {
 
     /* 에러 */
     /* 신규 메뉴 추가 */
-    public void registMenu(EntityManager entityManager, Menu menu) {
+    public boolean registMenu(EntityManager entityManager, Menu menu) {
+        boolean result = false;
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
         entityManager.persist(menu);
@@ -50,17 +51,22 @@ public class MenuEntity {
         try {
             entityManager.persist(menu);
             entityTransaction.commit();
+            result = true;
 
 
         } catch (Exception e) {
             entityTransaction.rollback();
         }
 
+        return result;
+
     }
 
     /* 메뉴 정보 수정 */
     /* 1. 메뉴 이름 수정 */
-    public void modifyMenuName(EntityManager entityManager, Menu menu) {
+    public boolean modifyMenuName(EntityManager entityManager, Menu menu) {
+        boolean result = false;
+
         Menu changeMenu = entityManager.find(Menu.class, menu.getMenuCode());
 
         EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -69,13 +75,17 @@ public class MenuEntity {
         try {
             menu.setMenuName(menu.getMenuName());
             entityTransaction.commit();
+            result = true;
         } catch (Exception e) {
             entityTransaction.rollback();
         }
+        return result;
     }
 
     /* 2. 메뉴 가격 수정 */
-    public void modifyMenuPrice(EntityManager entityManager, Menu menu) {
+    public boolean modifyMenuPrice(EntityManager entityManager, Menu menu) {
+        boolean result = false;
+
         Menu changeMenu = entityManager.find(Menu.class, menu.getMenuCode());
 
         EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -84,13 +94,18 @@ public class MenuEntity {
         try {
             menu.setMenuPrice(menu.getMenuPrice());
             entityTransaction.commit();
+            result = true;
         } catch (Exception e) {
             entityTransaction.rollback();
         }
+
+        return result;
+
     }
 
     /* 메뉴 삭제 */
-    public void removeMenu(EntityManager entityManager, int menuCode) {
+    public boolean removeMenu(EntityManager entityManager, int menuCode) {
+        boolean result = false;
         Menu removeMenu = entityManager.find(Menu.class, menuCode);
 
         EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -99,9 +114,12 @@ public class MenuEntity {
         try{
             entityManager.remove(removeMenu);
             entityTransaction.commit();
+            result = true;
         } catch(Exception e) {
             entityTransaction.rollback();
         }
+
+        return result;
     }
 
 }

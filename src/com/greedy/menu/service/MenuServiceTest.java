@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MenuServiceTest {
     private MenuService service;
@@ -24,15 +25,42 @@ class MenuServiceTest {
     }
 
     @Test
-    public void findMenuByCategofyCode_test() {
+    public void findMenuByCategoryCode_test() {
 
-        Category category = service.findMenuByCategofyCode(1);
+        Category category = service.findMenuByCategoryCode(5);
 
         assertNotNull(category);
-        category.getMenuList().forEach(System.out::println);
+        System.out.println("category = " + category);
 
     }
 
+    @Test
+    public void modifyMenuName_test() {
+
+        Menu menu = new Menu();
+        menu.setMenuCode(5);
+        menu.setMenuName("안녕");
+
+        assertTrue(service.modifyMenuName(menu));
+
+    }
+
+    @Test
+    public void modifyMenuPrice_test() {
+
+        Menu menu = new Menu();
+        menu.setMenuCode(5);
+        menu.setMenuPrice(10000);
+
+        assertTrue(service.modifyMenuName(menu));
+
+    }
+
+    @Test
+    public void removeMenu_test() {
+
+
+    }
 
 
 }

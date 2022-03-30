@@ -25,7 +25,7 @@ public class MenuService {
         return menu;
     }
 
-    public Category findMenuByCategofyCode(int categoryCode) {
+    public Category findMenuByCategoryCode(int categoryCode) {
         entityManager = getEntityManager();
 
         Category category = entity.findMenuByCategoryCode(entityManager, categoryCode);
@@ -35,7 +35,33 @@ public class MenuService {
         return category;
     }
 
+    public boolean modifyMenuName(Menu menu) {
+        entityManager = getEntityManager();
 
+        boolean result = entity.modifyMenuName(entityManager, menu);
 
+        close(entityManager);
 
+        return result;
+    }
+
+    public boolean modifyMenuPrice(Menu menu) {
+        entityManager = getEntityManager();
+
+        boolean result = entity.modifyMenuPrice(entityManager, menu);
+        close(entityManager);
+
+        return result;
+    }
+
+    public boolean removeMenu(int menuCode) {
+
+        entityManager = getEntityManager();
+
+        boolean result = entity.removeMenu(entityManager, menuCode);
+
+        close(entityManager);
+
+        return result;
+    }
 }
