@@ -1,67 +1,164 @@
 package com.greedy.menu.service;
 
-import com.greedy.menu.dto.Category;
-import com.greedy.menu.dto.Menu;
-import com.greedy.menu.entity.MenuEntity;
+import com.greedy.menu.dto.MenuDTO;
+import com.greedy.menu.entity.Category;
+import com.greedy.menu.entity.Menu;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.greedy.menu.common.Template.*;
 public class MenuService {
 
-    private final MenuEntity entity;
     private EntityManager entityManager;
 
-    public MenuService() {
-        entity = new MenuEntity();
-    }
-
-    public Menu findMenuByMenuCode(int menuCode) {
+    public List<MenuDTO> findMenuList() {
         entityManager = getEntityManager();
 
-        Menu menu =  entity.findMenuByMenuCode(entityManager, menuCode);
+        String query = "SELECT m FROM Menu m";
+
+        List<Menu> menuList = entityManager.createQuery(query, Menu.class).getResultList();
+
+        return parsingList(menuList);
+    }
+
+
+    public MenuDTO findMenuByMenuCode(int menuCode) {
+        entityManager = getEntityManager();
+
+        Menu menu = entityManager.find(Menu.class, menuCode);
 
         close(entityManager);
 
-        return menu;
+        return parsing(menu);
     }
 
-    public Category findMenuByCategoryCode(int categoryCode) {
+    public List<MenuDTO> findMenuByCategoryCode(int categoryCode) {
         entityManager = getEntityManager();
+        String query = "SELECT m FROM Menu m JOIN m.category c WHERE c.categoryCode = :categoryCode";
 
-        Category category = entity.findMenuByCategoryCode(entityManager, categoryCode);
+        List<Menu> menuList = entityManager.createQuery(query, Menu.class).setParameter("categoryCode", categoryCode).getResultList();
 
         close(entityManager);
 
-        return category;
+        return parsingList(menuList);
     }
 
-    public boolean modifyMenuName(Menu menu) {
-        entityManager = getEntityManager();
+    public boolean registMenu(MenuDTO menu) {
+        boolean result = false;
 
-        boolean result = entity.modifyMenuName(entityManager, menu);
+        entityManager = getEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+
+        try {
+
+            Category category = entityManager.find(Category.class, menu.getCategoryCode());
+
+            Menu registMenu = new Menu();
+            registMenu.setMenuName(menu.getMenuName());
+            registMenu.setMenuPrice(menu.getMenuPrice());
+            registMenu.setOrderableStatus(menu.getOrderableStatus());
+            registMenu.setCategory(category);
+
+            entityManager.persist(registMenu);
+            entityTransaction.commit();
+            result = true;
+
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
 
         close(entityManager);
 
         return result;
     }
 
-    public boolean modifyMenuPrice(Menu menu) {
+    public boolean modifyMenuName(MenuDTO menu) {
         entityManager = getEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        Menu changeMenu = entityManager.find(Menu.class, menu.getMenuCode());
 
-        boolean result = entity.modifyMenuPrice(entityManager, menu);
+        boolean result = false;
+        try {
+            changeMenu.setMenuName(menu.getMenuName());
+            entityTransaction.commit();
+            result = true;
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
+
+
+        close(entityManager);
+
+        return result;
+    }
+
+    public boolean modifyMenuPrice(MenuDTO menu) {
+        entityManager = getEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+        Menu changeMenu = entityManager.find(Menu.class, menu.getMenuCode());
+        boolean result = false;
+
+        try {
+            changeMenu.setMenuPrice(menu.getMenuPrice());
+            entityTransaction.commit();
+            result = true;
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
+
         close(entityManager);
 
         return result;
     }
 
     public boolean removeMenu(int menuCode) {
+        boolean result = false;
 
         entityManager = getEntityManager();
 
-        boolean result = entity.removeMenu(entityManager, menuCode);
+        Menu removeMenu = entityManager.find(Menu.class, menuCode);
+
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        entityTransaction.begin();
+
+        try{
+            entityManager.remove(removeMenu);
+            entityTransaction.commit();
+            result = true;
+        } catch(Exception e) {
+            entityTransaction.rollback();
+        }
 
         close(entityManager);
 
         return result;
+    }
+
+    private List<MenuDTO> parsingList(List<Menu> menuList) {
+        List<MenuDTO> dtoList = new ArrayList<>();
+
+        for(Menu menu: menuList) {
+            dtoList.add(parsing(menu));
+        }
+
+        return dtoList;
+    }
+
+    private MenuDTO parsing(Menu menu) {
+        MenuDTO dto = new MenuDTO();
+
+        dto.setMenuCode(menu.getMenuCode());
+        dto.setCategoryCode(menu.getCategory().getCategoryCode());
+        dto.setMenuPrice(menu.getMenuPrice());
+        dto.setMenuName(menu.getMenuName());
+        dto.setOrderableStatus(menu.getOrderableStatus());
+
+        return dto;
     }
 }

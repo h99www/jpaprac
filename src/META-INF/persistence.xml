@@ -5,9 +5,8 @@
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
             <property name="javax.persistence.jdbc.user" value="C##GREEDY"/>
             <property name="javax.persistence.jdbc.password" value="GREEDY"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1522:xe"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
             
-            <!-- 오라클 방언 설정 -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
             
             <property name="hibernate.show_sql" value="true"/>

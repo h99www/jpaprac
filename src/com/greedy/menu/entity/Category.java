@@ -1,12 +1,13 @@
-package com.greedy.menu.dto;
+package com.greedy.menu.entity;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(name = "Category")
 @Table(name = "TBL_CATEGORY")
-public class Category {
+public class Category  {
 
     @Id
     @Column(name = "CATEGORY_CODE")

@@ -1,44 +1,19 @@
 package com.greedy.menu.dto;
 
-
-import javax.persistence.*;
-
-@Entity(name = "Menu")
-@Table(name = "TBL_MENU")
-@SequenceGenerator(
-        name = "MENU_SEQUENCE_GENERATOR",
-        sequenceName = "SEQ_MENU_CODE_JPA",
-        initialValue = 200,
-        allocationSize = 1
-
-)
-public class Menu {
-
-    @Id
-    @Column(name = "MENU_CODE")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MENU_SEQUENCE_GENERATOR")
+public class MenuDTO {
     private int menuCode;
-
-    @Column(name = "MENU_NAME")
     private String menuName;
-
-    @Column(name = "MENU_PRICE")
     private int menuPrice;
-
-    @JoinColumn(name = "CATEGORY_CODE")
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Category category;
-
-    @Column(name = "ORDERABLE_STATUS")
+    private int categoryCode;
     private String orderableStatus;
 
-    public Menu() {}
+    public MenuDTO() {}
 
-    public Menu(int menuCode, String menuName, int menuPrice, Category category, String orderableStatus) {
+    public MenuDTO(int menuCode, String menuName, int menuPrice, int categoryCode, String orderableStatus) {
         this.menuCode = menuCode;
         this.menuName = menuName;
         this.menuPrice = menuPrice;
-        this.category = category;
+        this.categoryCode = categoryCode;
         this.orderableStatus = orderableStatus;
     }
 
@@ -66,12 +41,12 @@ public class Menu {
         this.menuPrice = menuPrice;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryCode() {
+        return categoryCode;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryCode(int categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public String getOrderableStatus() {
@@ -84,11 +59,11 @@ public class Menu {
 
     @Override
     public String toString() {
-        return "Menu{" +
+        return "MenuDTO{" +
                 "menuCode=" + menuCode +
                 ", menuName='" + menuName + '\'' +
                 ", menuPrice=" + menuPrice +
-                ", category=" + category +
+                ", categoryCode=" + categoryCode +
                 ", orderableStatus='" + orderableStatus + '\'' +
                 '}';
     }
